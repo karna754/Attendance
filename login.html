@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page - Attendance Management System</title>
+    <style>
+        /* Internal CSS */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px; /* Adjusted for more content space */
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .button-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center; /* Align buttons side by side */
+            gap: 15px; /* Space between buttons */
+        }
+
+        .login-btn {
+            background-color: #007BFF; /* Blue color */
+            color: #fff;
+            padding: 15px 30px; /* Increased button size */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px; /* Increased font size */
+            width: 150px; /* Button width */
+        }
+
+        .login-btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .login-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .login-form h2 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px; /* Increased padding for better usability */
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px; /* Increased font size */
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px; /* Increased padding */
+            background-color: #007BFF; /* Blue color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px; /* Increased font size */
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .error {
+            color: red;
+            font-size: 14px; /* Adjusted error font size */
+            margin-top: -8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Attendance Management System</h1>
+        <div class="button-container">
+            <button id="admin-btn" class="login-btn">Admin Login</button>
+            <button id="student-btn" class="login-btn">Student Login</button>
+        </div>
+
+        <!-- Admin Login Form -->
+        <div id="admin-login" class="login-form">
+            <h2>Admin Login</h2>
+            <form id="admin-form">
+                <label for="admin-email">Email</label>
+                <input type="email" id="admin-email" placeholder="Enter Admin Email" required>
+                <label for="admin-password">Mobile Number</label>
+                <input type="text" id="admin-password" placeholder="Enter Registered Mobile Number" required>
+                <span id="admin-error" class="error"></span>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- Student Login Form -->
+        <div id="student-login" class="login-form">
+            <h2>Student Login</h2>
+            <form id="student-form">
+                <label for="student-email">College Email</label>
+                <input type="email" id="student-email" placeholder="Enter Email (e.g., your hallticket@stmarysgroup.com)" required>
+                <label for="student-password">Password</label>
+                <input type="text" id="student-password" placeholder="Last Digits of Hallticket + Branch" required>
+                <span id="student-error" class="error"></span>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Internal JavaScript
+
+        // Show Admin Login
+        document.getElementById('admin-btn').addEventListener('click', function () {
+            document.getElementById('admin-login').style.display = 'block';
+            document.getElementById('student-login').style.display = 'none';
+        });
+
+        // Show Student Login
+        document.getElementById('student-btn').addEventListener('click', function () {
+            document.getElementById('student-login').style.display = 'block';
+            document.getElementById('admin-login').style.display = 'none';
+        });
+
+        // Validate Admin Login
+        document.getElementById('admin-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            const error = document.getElementById('admin-error');
+
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@(stmarysgroup\.com|workmail\.com)$/;
+            const mobilePattern = /^[0-9]{10}$/;
+
+            if (!emailPattern.test(email)) {
+                error.textContent = 'Invalid admin email. Use @stmarysgroup.com or @workmail.com';
+            } else if (!mobilePattern.test(password)) {
+                error.textContent = 'Invalid mobile number. Enter a valid 10-digit number.';
+            } else {
+                error.textContent = '';
+                alert('Admin login successful!');
+                // Redirect to admin page (relative path)
+                window.location.href = 'admin.html';
+            }
+        });
+
+        // Validate Student Login
+        document.getElementById('student-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email = document.getElementById('student-email').value;
+            const password = document.getElementById('student-password').value;
+            const error = document.getElementById('student-error');
+
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@stmarysgroup\.com$/;
+            const passwordPattern = /^[0-9]{4}[A-Z]{2,}$/; // Example: 1234CSE
+
+            if (!emailPattern.test(email)) {
+                error.textContent = 'Invalid student email. Use @stmarysgroup.com';
+            } else if (!passwordPattern.test(password)) {
+                error.textContent = 'Invalid password. Use last digits of hallticket + branch (e.g., 1234CSE)';
+            } else {
+                error.textContent = '';
+                alert('Student login successful!');
+                // Redirect to student page (relative path)
+                window.location.href = 'student.html';
+            }
+        });
+    </script>
+</body>
+</html>

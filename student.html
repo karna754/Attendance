@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Attendance Management</title>
+    <style>
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-btn {
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .complaints-form,
+        .performance-chart,
+        .attendance-history {
+            margin-top: 20px;
+        }
+
+        .complaints-form textarea,
+        .complaints-form input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .performance-chart canvas,
+        .attendance-history table {
+            width: 100%;
+        }
+
+        .attendance-history table {
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .attendance-history th,
+        .attendance-history td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .attendance-history th {
+            background-color: #f2f2f2;
+        }
+
+        .semester-selector {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .semester-selector select {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .complaints-btn {
+            background-color: #28a745;
+            float: right;
+        }
+
+        .complaints-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Complaint Status Styling */
+        .complaints-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .complaints-table th {
+            background-color: #f2f2f2;
+        }
+
+        .status-pending {
+            color: red;
+        }
+
+        .status-resolved {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Dashboard</h1>
+    <div class="container student-dashboard" id="student-dashboard">
+        <h2>Welcome, Student</h2>
+        
+        <!-- Semester Selector -->
+        <div class="semester-selector">
+            <label for="semester">Select Semester:</label>
+            <select id="semester" onchange="loadSemesterData()">
+                <option value="semester1">Semester 1</option>
+                <option value="semester2">Semester 2</option>
+                <option value="semester3">Semester 3</option>
+                <option value="semester4">Semester 4</option>
+                <option value="semester5">Semester 5</option>
+                <option value="semester6">Semester 6</option>
+                <option value="semester7">Semester 7</option>
+                <option value="semester8">Semester 8</option>
+            </select>
+        </div>
+
+        <!-- Attendance History -->
+        <div class="attendance-history">
+            <h3>Attendance History</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="attendance-history-body">
+                    <!-- Example Data -->
+                    <tr>
+                        <td>2024-10-01</td>
+                        <td>Present</td>
+                    </tr>
+                    <tr>
+                        <td>2024-10-02</td>
+                        <td>Absent</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="performance-chart">
+            <h3>Student Performance (Semester-wise)</h3>
+            <canvas id="performanceChart"></canvas>
+        </div>
+
+        <!-- Complaints Section -->
+        <div class="complaints-form">
+            <h3>Submit a Complaint</h3>
+            <textarea id="complaint-description" placeholder="Enter your complaint..." rows="4"></textarea>
+            <input type="file" id="complaint-image" accept="image/*">
+            <button class="dashboard-btn" onclick="submitComplaint()">Submit Complaint</button>
+        </div>
+
+        <h3>My Complaints</h3>
+        <table class="complaints-table">
+            <thead>
+                <tr>
+                    <th>Complaint Description</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="complaints-list">
+                <!-- Example Data -->
+                <tr>
+                    <td>My Wi-Fi is not working</td>
+                    <td class="status-pending">Pending</td>
+                </tr>
+                <tr>
+                    <td>Classroom AC is not cooling</td>
+                    <td class="status-resolved">Resolved</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Logout Button -->
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        // Function to load semester data (example)
+        function loadSemesterData() {
+            const semester = document.getElementById("semester").value;
+            console.log("Load data for", semester); // Replace with actual data loading logic
+        }
+
+        // Function to load attendance history data
+        function loadAttendanceHistory() {
+            // Replace with dynamic data loading
+            const historyTable = document.getElementById("attendance-history-body");
+            historyTable.innerHTML = `
+                <tr><td>2024-10-01</td><td>Present</td></tr>
+                <tr><td>2024-10-02</td><td>Absent</td></tr>
+            `;
+        }
+
+        // Function to load performance chart (example)
+        function loadPerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            const performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5'],
+                    datasets: [{
+                        label: 'Attendance Percentage',
+                        data: [80, 85, 90, 88, 95],
+                        borderColor: '#007BFF',
+                        backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                        fill: true
+                    }]
+                }
+            });
+        }
+
+        // Function to submit a complaint
+        function submitComplaint() {
+            const complaintDescription = document.getElementById("complaint-description").value;
+            const complaintImage = document.getElementById("complaint-image").files[0];
+
+            if (complaintDescription.length > 0 && complaintImage) {
+                alert('Complaint submitted successfully!');
+                // Add complaint to the complaints table (simplified)
+                const complaintsList = document.getElementById("complaints-list");
+                complaintsList.innerHTML += `
+                    <tr>
+                        <td>${complaintDescription}</td>
+                        <td class="status-pending">Pending</td>
+                    </tr>
+                `;
+            } else {
+                alert('Please fill in all fields before submitting.');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            alert("Logged out successfully!");
+            // Redirect to login page
+            window.location.href = "login.html"; // Adjust the URL for your actual login page
+        }
+
+        // Initial Load Data
+        loadSemesterData();
+        loadAttendanceHistory();
+        loadPerformanceChart();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
