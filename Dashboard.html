@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Dashboard</title>
+    <style>
+        /* Internal CSS */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .admin-name {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .actions button {
+            margin: 0 5px;
+            padding: 5px 10px;
+        }
+
+        .actions button.resolve {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .actions button.resolve:hover {
+            background-color: #218838;
+        }
+
+        .actions input.upload {
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .search-bar {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .search-bar input {
+            width: 75%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .search-bar button {
+            width: 20%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+
+        .uploaded-file {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complaint Dashboard</h1>
+        <p class="admin-name">Admin: John Smith</p>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search complaints...">
+            <button id="search-btn">Search</button>
+        </div>
+
+        <!-- Complaint Log -->
+        <h2>Complaint Log</h2>
+        <table id="complaint-table">
+            <thead>
+                <tr>
+                    <th>Complaint ID</th>
+                    <th>Name</th>
+                    <th>Employee ID</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Upload</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example Complaint Records -->
+                <tr>
+                    <td>1</td>
+                    <td>John Doe</td>
+                    <td>EMP123</td>
+                    <td>2024-11-01</td>
+                    <td>Attendance not marked for 01/11/2024</td>
+                    <td class="status">Pending</td>
+                    <td>
+                        <input type="file" class="upload" accept="image/*" onchange="handleUpload(this)">
+                        <div class="uploaded-file" style="display: none;"></div>
+                    </td>
+                    <td class="actions">
+                        <button class="resolve" onclick="resolveComplaint(this)">Resolve</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jane Smith</td>
+                    <td>EMP456</td>
+                    <td>2024-11-02</td>
+                    <td>Incorrect attendance record for October</td>
+                    <td class="status">Pending</td>
+                    <td>
+                        <input type="file" class="upload" accept="image/*" onchange="handleUpload(this)">
+                        <div class="uploaded-file" style="display: none;"></div>
+                    </td>
+                    <td class="actions">
+                        <button class="resolve" onclick="resolveComplaint(this)">Resolve</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Resolve Complaint Functionality
+        function resolveComplaint(button) {
+            const row = button.parentNode.parentNode; // Get the row of the clicked button
+            const statusCell = row.querySelector(".status"); // Find the status cell
+            statusCell.innerText = "Resolved"; // Update the status to "Resolved"
+            button.style.display = "none"; // Hide the "Resolve" button after resolving
+        }
+
+        // Search Functionality
+        document.getElementById("search-btn").addEventListener("click", function () {
+            const searchText = document.getElementById("search-input").value.toLowerCase();
+            const rows = document.querySelectorAll("#complaint-table tbody tr");
+
+            rows.forEach(row => {
+                const rowText = row.innerText.toLowerCase();
+                row.style.display = rowText.includes(searchText) ? "" : "none";
+            });
+        });
+
+        // Handle File Upload
+        function handleUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                const fileName = file.name; // Get the uploaded file name
+                const uploadedFileDiv = input.nextElementSibling; // Get the sibling div to display the file name
+
+                // Display the uploaded file as a link
+                uploadedFileDiv.style.display = "block";
+                uploadedFileDiv.innerHTML = `<a href="#" onclick="alert('You clicked on file: ${fileName}')">${fileName}</a>`;
+            }
+        }
+    </script>
+</body>
+</html>
