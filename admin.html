@@ -170,8 +170,8 @@
         <!-- Logout Button -->
         <button class="logout-btn" onclick="logout()">Logout</button>
 
-        <!-- Complaints Button -->
-        <button class="btn complaints-btn" onclick="openComplaintsPage()">Complaints</button>
+        <a href="Dashboard.html"><button class="btn complaints-btn" onclick="openComplaintsPage()">Complaints</button></a>
+
 
         <!-- Semester-wise Dropdown -->
         <div class="dropdown">
@@ -310,9 +310,11 @@
             alert(`Loading data for ${semester}`);
         }
 
-        // Open Complaints Page
-        function openComplaintsPage() {
-            alert("Redirecting to complaints page...");
+          // Open Complaints Page
+          function openComplaintsPage() {
+            alert("Opening Complaints Page...");
+            const iframe = document.getElementById("complaints-iframe");
+            iframe.style.display = "block"; // Show the iframe
         }
 
         // Download Report Functionality
